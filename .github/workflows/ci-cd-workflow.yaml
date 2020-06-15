@@ -7,19 +7,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - uses: actions/checkout@v2
-      - name: Manually set container env variables
-        run: |
-          heroku container:login
-          heroku config:set DATABASE_URI=$DATABASE_URI
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          DATABASE_URI: ${{ secrets.DATABASE_URI }}
-      - uses: akhileshns/heroku-deploy@v3.0.4
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.0.4
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
+
+      - name: Set Heroku config vars
+        run: |
+          heroku config:set DATABASE_URI=$DATABASE_URI
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
