@@ -22,7 +22,9 @@ app.use(express.static('./public'))
 
 app.get('/', async(req,res) => {
 
+
     res.set('Content-Type', 'application/json')
+    res.send(process.env.DATABASE_URI)
     res.status(200).render('docs')
 })
 
